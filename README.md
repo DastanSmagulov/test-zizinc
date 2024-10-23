@@ -34,9 +34,15 @@ Follow these instructions to set up and run the project on your local machine:
 2. **Navigate to the project directory:**
   ```bash
   cd cart-app
+
 3. **Install the dependencies:**
   ```bash
   npm install
-4. **Start the development server:**
+
+4. **Start the server development server:**
+   ```bash
+   npx json-server --watch src/db.json --port 5000
+
+5. **Start the client development server:**
   ```bash
   npm run dev
