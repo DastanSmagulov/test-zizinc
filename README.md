@@ -44,5 +44,5 @@ Follow these instructions to set up and run the project on your local machine:
    npx json-server --watch src/db.json --port 5000
    
 5. **Start the client development server:**
-  ```bash
-  npm run dev
+   ```bash
+   npm run dev
