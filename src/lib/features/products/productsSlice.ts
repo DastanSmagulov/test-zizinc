@@ -24,8 +24,10 @@ const initialState: ProductsState = {
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async () => {
-    const response = await axios("http://localhost:5000/products");
-    return response.data;
+    const response = await axios(
+      `http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/products`
+    );
+    return response.data.products;
   }
 );
 

@@ -1,4 +1,3 @@
-// In your cartSlice.ts or equivalent file
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface CartItem {
