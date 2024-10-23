@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 interface CartItem {
   id: number;
@@ -11,6 +11,7 @@ interface CartItem {
 interface CartProps {
   cartItems: CartItem[];
   removeFromCart: (product: CartItem) => void;
+  updateQuantity: (id: number, quantity: number) => void;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -18,6 +19,7 @@ interface CartProps {
 const Cart: React.FC<CartProps> = ({
   cartItems,
   removeFromCart,
+  updateQuantity,
   isOpen,
   onClose,
 }) => {
@@ -28,7 +30,7 @@ const Cart: React.FC<CartProps> = ({
 
   return (
     <div
-      className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform ${
+      className={`fixed top-0 right-0 h-full w-[80vw] sm:w-[40vw] bg-white shadow-lg transform ${
         isOpen ? "translate-x-0" : "translate-x-full"
       } transition-transform duration-300`}
     >
@@ -37,17 +39,26 @@ const Cart: React.FC<CartProps> = ({
       </button>
       <h2 className="text-xl font-semibold p-4">Cart</h2>
       <div className="p-4">
-        {cartItems.length === 0 ? (
+        {cartItems?.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
           <>
-            {cartItems.map((item) => (
+            {cartItems?.map((item) => (
               <div
                 key={item.id}
                 className="flex justify-between items-center mb-4"
               >
                 <span>
-                  {item.name} x {item.quantity}
+                  {item.name} x
+                  <input
+                    type="number"
+                    min="1"
+                    value={item.quantity}
+                    onChange={(e) =>
+                      updateQuantity(item.id, Number(e.target.value))
+                    }
+                    className="w-16 mx-2 border rounded-md text-center"
+                  />
                 </span>
                 <span>${(item.price * item.quantity).toFixed(2)}</span>
                 <button
@@ -59,7 +70,7 @@ const Cart: React.FC<CartProps> = ({
               </div>
             ))}
             <div className="font-bold mt-4">
-              Total: ${totalAmount.toFixed(2)}
+              Total: ${totalAmount?.toFixed(2)}
             </div>
           </>
         )}

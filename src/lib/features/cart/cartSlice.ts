@@ -1,4 +1,4 @@
-"use client"
+// In your cartSlice.ts or equivalent file
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface CartItem {
@@ -25,9 +25,9 @@ const cartSlice = createSlice({
         (item) => item.id === action.payload.id
       );
       if (existingItem) {
-        existingItem.quantity += 1;
+        existingItem.quantity += action.payload.quantity;
       } else {
-        state.cartItems.push({ ...action.payload, quantity: 1 });
+        state.cartItems.push({ ...action.payload });
       }
     },
     removeFromCart: (state, action: PayloadAction<number>) => {
@@ -35,9 +35,21 @@ const cartSlice = createSlice({
         (item) => item.id !== action.payload
       );
     },
+    updateCartQuantity: (
+      state,
+      action: PayloadAction<{ id: number; quantity: number }>
+    ) => {
+      const item = state.cartItems.find(
+        (item) => item.id === action.payload.id
+      );
+      if (item) {
+        item.quantity = action.payload.quantity;
+      }
+    },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateCartQuantity } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

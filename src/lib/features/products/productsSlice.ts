@@ -1,5 +1,6 @@
-"use client"
+"use client";
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 interface Product {
   id: number;
@@ -7,6 +8,7 @@ interface Product {
   category: string;
   price: number;
   image: string;
+  quantity: number;
 }
 
 interface ProductsState {
@@ -22,9 +24,8 @@ const initialState: ProductsState = {
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async () => {
-    const response = await fetch("http://localhost:5000/products");
-    const data = await response.json();
-    return data;
+    const response = await axios("http://localhost:5000/products");
+    return response.data;
   }
 );
 

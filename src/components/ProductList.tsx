@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import ProductCard from "./ProductCard";
 
@@ -8,11 +8,12 @@ interface Product {
   category: string;
   price: number;
   image: string;
+  quantity: number;
 }
 
 interface ProductListProps {
   products: Product[];
-  addToCart: (product: Product) => void;
+  addToCart: (product: Product, quantity: number) => void;
 }
 
 const ProductList: React.FC<ProductListProps> = ({ products, addToCart }) => {
