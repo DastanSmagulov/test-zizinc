@@ -35,6 +35,11 @@ const HomePage: React.FC = () => {
       sortOrder === "asc" ? a.price - b.price : b.price - a.price
     );
 
+  const totalAmount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Product Store</h1>
@@ -48,7 +53,7 @@ const HomePage: React.FC = () => {
         className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md"
         onClick={() => setIsCartOpen(true)}
       >
-        Open Cart ({cartItems?.length})
+        Open Cart ({totalAmount})
       </button>
       <Cart
         cartItems={cartItems}
