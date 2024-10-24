@@ -1,4 +1,3 @@
-"use client"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface FilterState {
@@ -30,5 +29,4 @@ const filterSlice = createSlice({
 });
 
 export const { setCategory, setSortOrder, setSearchTerm } = filterSlice.actions;
-
 export default filterSlice.reducer;

@@ -1,6 +1,9 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../lib/features/cart/cartSlice";
+import { AppDispatch } from "../lib/store";
 
 interface Product {
   id: number;
@@ -13,26 +16,22 @@ interface Product {
 
 interface ProductCardProps {
   product: Product;
-  addToCart: (product: Product, quantity: number) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, addToCart }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
 
   const handleAddToCart = () => {
     if (selectedQuantity > 0) {
-      addToCart(product, selectedQuantity);
+      dispatch(addToCart({ ...product, quantity: selectedQuantity }));
       setSelectedQuantity(1);
     }
   };
 
-  const increaseQuantity = () => {
-    setSelectedQuantity((prev) => prev + 1);
-  };
-
-  const decreaseQuantity = () => {
+  const increaseQuantity = () => setSelectedQuantity((prev) => prev + 1);
+  const decreaseQuantity = () =>
     setSelectedQuantity((prev) => (prev > 1 ? prev - 1 : prev));
-  };
 
   return (
     <div className="border p-4 rounded-md shadow-md">
@@ -45,7 +44,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, addToCart }) => {
       />
       <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
       <p className="text-gray-500">${product.price.toFixed(2)}</p>
-
       <div className="flex items-center mt-4">
         <button
           onClick={decreaseQuantity}
@@ -61,7 +59,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, addToCart }) => {
           +
         </button>
       </div>
-
       <button
         onClick={handleAddToCart}
         className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"

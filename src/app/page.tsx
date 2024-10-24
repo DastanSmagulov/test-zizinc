@@ -8,33 +8,16 @@ import SearchBar from "../components/SearchBar";
 import Cart from "../components/Cart";
 import { RootState, AppDispatch } from "../lib/store";
 import { fetchProducts } from "../lib/features/products/productsSlice";
-import {
-  addToCart,
-  removeFromCart,
-  updateCartQuantity,
-} from "../lib/features/cart/cartSlice";
-import {
-  setCategory,
-  setSortOrder,
-  setSearchTerm,
-} from "../lib/features/filter/filterSlice";
-
-interface Product {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  image: string;
-  quantity: number;
-}
 
 const HomePage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { products } = useSelector((state: RootState) => state.products);
-  const { cartItems } = useSelector((state: RootState) => state.cart);
-  const { selectedCategory, sortOrder, searchTerm } = useSelector(
-    (state: RootState) => state.filter
+  const products = useSelector((state: RootState) => state.products.products);
+  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+  const selectedCategory = useSelector(
+    (state: RootState) => state.filter.selectedCategory
   );
+  const sortOrder = useSelector((state: RootState) => state.filter.sortOrder);
+  const searchTerm = useSelector((state: RootState) => state.filter.searchTerm);
   const [isCartOpen, setIsCartOpen] = React.useState<boolean>(false);
 
   useEffect(() => {
@@ -52,27 +35,15 @@ const HomePage: React.FC = () => {
       sortOrder === "asc" ? a.price - b.price : b.price - a.price
     );
 
-  const handleAddToCart = (product: Product, quantity: number) => {
-    dispatch(addToCart({ ...product, quantity }));
-  };
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Product Store</h1>
-      <SearchBar
-        searchTerm={searchTerm}
-        onSearchChange={(term) => dispatch(setSearchTerm(term))}
-      />
+      <SearchBar />
       <Filter
         categories={Array.from(new Set(products.map((p) => p.category)))}
-        selectedCategory={selectedCategory}
-        onCategoryChange={(category) => dispatch(setCategory(category))}
       />
-      <Sort
-        sortOrder={sortOrder}
-        onSortChange={(order) => dispatch(setSortOrder(order))}
-      />
-      <ProductList products={filteredProducts} addToCart={handleAddToCart} />
+      <Sort />
+      <ProductList products={filteredProducts} />
       <button
         className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md"
         onClick={() => setIsCartOpen(true)}
@@ -81,10 +52,6 @@ const HomePage: React.FC = () => {
       </button>
       <Cart
         cartItems={cartItems}
-        removeFromCart={(item) => dispatch(removeFromCart(item.id))}
-        updateQuantity={(id, quantity) =>
-          dispatch(updateCartQuantity({ id, quantity }))
-        }
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
       />

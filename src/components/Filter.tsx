@@ -1,32 +1,38 @@
-"use client"
+"use client";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategory } from "../lib/features/filter/filterSlice";
+import { RootState } from "../lib/store";
 
 interface FilterProps {
   categories: string[];
-  selectedCategory: string;
-  onCategoryChange: (category: string) => void;
 }
 
-const Filter: React.FC<FilterProps> = ({
-  categories,
-  selectedCategory,
-  onCategoryChange,
-}) => {
+const Filter: React.FC<FilterProps> = ({ categories }) => {
+  const dispatch = useDispatch();
+  const selectedCategory = useSelector(
+    (state: RootState) => state.filter.selectedCategory
+  );
+
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    dispatch(setCategory(event.target.value));
+  };
+
   return (
-    <div className="mb-4">
-      <select
-        value={selectedCategory}
-        onChange={(e) => onCategoryChange(e.target.value)}
-        className="border p-2 rounded-md w-full"
-      >
-        <option value="">All Categories</option>
-        {categories.map((category) => (
-          <option key={category} value={category}>
-            {category}
-          </option>
-        ))}
-      </select>
-    </div>
+    <select
+      value={selectedCategory}
+      onChange={handleCategoryChange}
+      className="border p-2 w-full mb-4"
+    >
+      <option value="">All Categories</option>
+      {categories.map((category) => (
+        <option key={category} value={category}>
+          {category}
+        </option>
+      ))}
+    </select>
   );
 };
 

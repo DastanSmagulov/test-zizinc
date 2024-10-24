@@ -1,23 +1,26 @@
 "use client";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setSortOrder } from "../lib/features/filter/filterSlice";
+import { RootState } from "../lib/store";
 
-interface SortProps {
-  sortOrder: "asc" | "desc";
-  onSortChange: (order: "asc" | "desc") => void;
-}
+const Sort: React.FC = () => {
+  const dispatch = useDispatch();
+  const sortOrder = useSelector((state: RootState) => state.filter.sortOrder);
 
-const Sort: React.FC<SortProps> = ({ sortOrder, onSortChange }) => {
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch(setSortOrder(event.target.value as "asc" | "desc"));
+  };
+
   return (
-    <div className="mb-4">
-      <select
-        value={sortOrder}
-        onChange={(e) => onSortChange(e.target.value as "asc" | "desc")}
-        className="border p-2 rounded-md w-full"
-      >
-        <option value="asc">Price: Low to High</option>
-        <option value="desc">Price: High to Low</option>
-      </select>
-    </div>
+    <select
+      value={sortOrder}
+      onChange={handleSortChange}
+      className="border p-2 w-full mb-4"
+    >
+      <option value="asc">Price: Low to High</option>
+      <option value="desc">Price: High to Low</option>
+    </select>
   );
 };
 

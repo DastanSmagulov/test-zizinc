@@ -1,25 +1,25 @@
-"use client"
+"use client";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setSearchTerm } from "../lib/features/filter/filterSlice";
+import { RootState } from "../lib/store";
 
-interface SearchBarProps {
-  searchTerm: string;
-  onSearchChange: (term: string) => void;
-}
+const SearchBar: React.FC = () => {
+  const dispatch = useDispatch();
+  const searchTerm = useSelector((state: RootState) => state.filter.searchTerm);
 
-const SearchBar: React.FC<SearchBarProps> = ({
-  searchTerm,
-  onSearchChange,
-}) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchTerm(event.target.value));
+  };
+
   return (
-    <div className="mb-4">
-      <input
-        type="text"
-        placeholder="Search products..."
-        value={searchTerm}
-        onChange={(e) => onSearchChange(e.target.value)}
-        className="border p-2 rounded-md w-full"
-      />
-    </div>
+    <input
+      type="text"
+      value={searchTerm}
+      onChange={handleSearchChange}
+      placeholder="Search products..."
+      className="border p-2 w-full mb-4"
+    />
   );
 };
 
